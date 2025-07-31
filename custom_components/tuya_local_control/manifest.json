@@ -1,7 +1,7 @@
 {
   "domain": "tuya_local_control",
   "name": "Tuya Local Control",
-  "documentation": "https://github.com/custom-components/tuya_local_control",
+  "documentation": "https://github.com/dev-vinicius-andrade/local-tuya-control/blob/main/home_assistant_setup.md",
   "dependencies": [],
   "config_flow": true,
   "codeowners": ["@homeassistant-tuya-local"],
