@@ -1,0 +1,8 @@
+{
+  "name": "Tuya Local Control",
+  "render_readme": true,
+  "content_in_root": false,
+  "domains": ["tuya_local_control"],
+  "homeassistant": "2023.5.0",
+  "persistent_directory": "userfiles"
+}
