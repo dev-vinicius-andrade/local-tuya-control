@@ -110,27 +110,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     
     # Store the config entry data
     hass.data[DOMAIN][entry.entry_id] = entry.data
-    
-    # Forward setup to platforms
+      # Forward setup to platforms
     for component in ["switch", "number", "light", "sensor", "fan"]:
         hass.async_create_task(
-            hass.config_entries.async_forward_entry_setup(entry, component)
+            hass.config_entries.async_forward_entry_setups(entry, [component])
         )
     
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    import asyncio
     
-    unload_ok = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, component)
-                for component in ["switch", "number", "light", "sensor", "fan"]
-            ]
-        )
-    )
+    components = ["switch", "number", "light", "sensor", "fan"]
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, components)
     
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
