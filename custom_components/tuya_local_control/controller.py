@@ -23,6 +23,7 @@ class TuyaLocalController:
         
     def _create_device(self):
         """Create and configure a tinytuya device."""
+        _LOGGER.debug(f"Creating Tuya device with ID: {self.device_id}, IP: {self.ip}, version: {self.version}")
         device = tinytuya.OutletDevice(
             dev_id=self.device_id,
             address=self.ip,
@@ -30,6 +31,7 @@ class TuyaLocalController:
         )
         device.set_version(self.version)
         device.set_socketPersistent(True)
+        device.set_socketTimeout(10.0)  # Increase timeout to 10 seconds for more reliable communication
         return device
     
     def set_value(self, entity_id, value):
@@ -73,7 +75,9 @@ class TuyaLocalController:
                 response = temp_device.set_status(set_dp, value)
             else:
                 response = self.device.set_status(set_dp, value)
-            return True
+            
+            _LOGGER.debug(f"Set value response for {entity_id}: {response}")
+            return response
         except Exception as e:
             _LOGGER.error(f"Error setting value for {entity_id}: {e}")
             return False
@@ -130,7 +134,10 @@ class TuyaLocalController:
     def get_status(self):
         """Get the complete status from the device."""
         try:
-            return self.device.status()
+            _LOGGER.debug(f"Getting status for device {self.device_id} at IP {self.ip}")
+            status = self.device.status()
+            _LOGGER.debug(f"Raw status response: {status}")
+            return status
         except Exception as e:
             _LOGGER.error(f"Error getting status for {self.name}: {e}")
             return None
